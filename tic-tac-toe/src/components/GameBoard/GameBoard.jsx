@@ -8,19 +8,17 @@ let initialGameBoard = [
 
 let initalPlayer = true;
 
-export default function GameBoard() {
+export default function GameBoard({ changeActivePlayer, activePlayerSymbol }) {
 	const [gameBoard, setGameBoard] = useState(initialGameBoard);
-	const [playerTurn, setPlayerTurn] = useState(initalPlayer);
 
 	function UpdateBoard(row, col) {
 		if (gameBoard[row][col]) {
 			return;
 		}
-		let character = playerTurn ? 'X' : 'O';
-		let newGameBoard = [...gameBoard.map(innerArray => [...innerArray])];
-		newGameBoard[row][col] = character;
+		let newGameBoard = [...gameBoard.map((innerArray) => [...innerArray])]; // deep copy of array
+		newGameBoard[row][col] = activePlayerSymbol;
 		setGameBoard(newGameBoard);
-		setPlayerTurn(playerTurn => !playerTurn);
+		changeActivePlayer();
 	}
 
 	return (
