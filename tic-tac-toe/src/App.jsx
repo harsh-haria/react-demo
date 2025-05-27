@@ -2,14 +2,34 @@ import "./index.css";
 
 import Player from "./components/Player/Player";
 import GameBoard from "./components/GameBoard/GameBoard";
+import Log from "./components/Log/Log";
+
 import { useState } from "react";
 
-function App() {
-	let [activePlayer, setActivePlayer] = useState("X");
+function deriveActivePlayer(gameTurns) {
+	let currentPlayer = "X";
 
-	function changePlayer() {
-		setActivePlayer((activeP) => {
-			return activeP === "X" ? "O" : "X";
+	if (gameTurns.length > 0 && gameTurns[0].player === "X") {
+		currentPlayer = "O";
+	}
+	
+	return currentPlayer;
+}
+
+function App() {
+	let [gameTurns, setGameTurns] = useState([]);
+
+	const activePlayer = deriveActivePlayer(gameTurns);
+
+	function changePlayer(rowIndex, colIndex) {
+		setGameTurns((prevTurns) => {
+			const currentPlayer = deriveActivePlayer(prevTurns);
+			const updatedTurns = [
+				{ square: { row: rowIndex, col: colIndex }, player: currentPlayer },
+				...prevTurns,
+			];
+
+			return updatedTurns;
 		});
 	}
 
@@ -28,12 +48,9 @@ function App() {
 						activated={activePlayer === "O"}
 					/>
 				</ol>
-				<GameBoard
-					changeActivePlayer={changePlayer}
-					activePlayerSymbol={activePlayer}
-				/>
+				<GameBoard changeActivePlayer={changePlayer} turns={gameTurns} />
 			</div>
-			LOG
+			<Log turns={gameTurns} />
 		</main>
 	);
 }

@@ -1,4 +1,4 @@
-import { useState } from "react";
+// import { useState } from "react";
 
 let initialGameBoard = [
 	[null, null, null],
@@ -6,19 +6,16 @@ let initialGameBoard = [
 	[null, null, null],
 ];
 
-let initalPlayer = true;
+// let initalPlayer = true;
 
-export default function GameBoard({ changeActivePlayer, activePlayerSymbol }) {
-	const [gameBoard, setGameBoard] = useState(initialGameBoard);
+export default function GameBoard({ changeActivePlayer, turns }) {
+	let gameBoard = initialGameBoard;
 
-	function UpdateBoard(row, col) {
-		if (gameBoard[row][col]) {
-			return;
-		}
-		let newGameBoard = [...gameBoard.map((innerArray) => [...innerArray])]; // deep copy of array
-		newGameBoard[row][col] = activePlayerSymbol;
-		setGameBoard(newGameBoard);
-		changeActivePlayer();
+	for (const turn of turns) {
+		const { square, player } = turn;
+		const { row, col } = square;
+
+		gameBoard[row][col] = player;
 	}
 
 	return (
@@ -28,7 +25,9 @@ export default function GameBoard({ changeActivePlayer, activePlayerSymbol }) {
 					<ol>
 						{row.map((col, _colIndex) => (
 							<li key={_colIndex}>
-								<button onClick={() => UpdateBoard(_rowIndex, _colIndex)}>
+								<button
+									onClick={() => changeActivePlayer(_rowIndex, _colIndex)}
+								>
 									{col}
 								</button>
 							</li>
