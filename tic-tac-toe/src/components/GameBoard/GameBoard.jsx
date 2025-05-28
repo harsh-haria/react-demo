@@ -1,32 +1,22 @@
 // import { useState } from "react";
 
-let initialGameBoard = [
-	[null, null, null],
-	[null, null, null],
-	[null, null, null],
-];
+
 
 // let initalPlayer = true;
 
-export default function GameBoard({ changeActivePlayer, turns }) {
-	let gameBoard = initialGameBoard;
-
-	for (const turn of turns) {
-		const { square, player } = turn;
-		const { row, col } = square;
-
-		gameBoard[row][col] = player;
-	}
+export default function GameBoard({ changeActivePlayer, board }) {
+	
 
 	return (
 		<ol id="game-board">
-			{gameBoard.map((row, _rowIndex) => (
+			{board.map((row, _rowIndex) => (
 				<li key={_rowIndex}>
 					<ol>
 						{row.map((col, _colIndex) => (
 							<li key={_colIndex}>
 								<button
 									onClick={() => changeActivePlayer(_rowIndex, _colIndex)}
+									disabled={col ? true : false}
 								>
 									{col}
 								</button>
